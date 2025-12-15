@@ -1,0 +1,32 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Create a node",
+        "description": "Create a hierarchical aggregation node (room, breaker, floor...).",
+        "data": {
+          "node_name": "Node name",
+          "upstream_entity": "Upstream total sensor (optional)",
+          "downstream_power": "Downstream power sensors (W)",
+          "create_proxies": "Create proxy sensors for downstream power",
+          "enable_energy": "Enable energy total (kWh)",
+          "downstream_energy": "Downstream energy sensors (kWh/Wh)"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Configure node",
+        "data": {
+          "upstream_entity": "Upstream total sensor (optional)",
+          "downstream_power": "Downstream power sensors (W)",
+          "create_proxies": "Create proxy sensors for downstream power",
+          "enable_energy": "Enable energy total (kWh)",
+          "downstream_energy": "Downstream energy sensors (kWh/Wh)"
+        }
+      }
+    }
+  }
+}
