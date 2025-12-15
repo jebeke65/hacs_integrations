@@ -1,13 +1,11 @@
 {
   "domain": "hierarchical_power",
   "name": "Hierarchical Power Aggregator",
-  "codeowners": [
-    "@your-github-handle"
-  ],
+  "codeowners": ["@jebeke65"],
   "config_flow": true,
-  "documentation": "https://github.com/your-user/your-repo",
-  "issue_tracker": "https://github.com/your-user/your-repo/issues",
-  "version": "0.2.0",
+  "documentation": "https://github.com/jebeke65/hacs_integrations",
+  "issue_tracker": "https://github.com/jebeke65/hacs_integrations/issues",
+  "version": "0.0.1",
   "iot_class": "local_polling",
   "requirements": []
 }
