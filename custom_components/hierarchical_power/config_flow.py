@@ -58,23 +58,26 @@ class HierarchicalPowerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 }
 
                 return self.async_create_entry(title=node_name, data=data, options=options)
-
+        upstream_default = o.get(CONF_UPSTREAM_ENTITY)
         schema = vol.Schema(
             {
-                vol.Required(CONF_NODE_NAME): str,
-                vol.Optional(CONF_UPSTREAM_ENTITY): selector.EntitySelector(
-                    selector.EntitySelectorConfig(domain=["sensor"], multiple=False)
-                ),
-                vol.Optional(CONF_DOWNSTREAM_POWER, default=[]): selector.EntitySelector(
-                    selector.EntitySelectorConfig(domain=["sensor"], multiple=True)
-                ),
-                vol.Optional(CONF_CREATE_PROXIES, default=DEFAULT_CREATE_PROXIES): bool,
-                vol.Optional(CONF_ENABLE_ENERGY, default=DEFAULT_ENABLE_ENERGY): bool,
-                vol.Optional(CONF_DOWNSTREAM_ENERGY, default=[]): selector.EntitySelector(
-                    selector.EntitySelectorConfig(domain=["sensor"], multiple=True)
-                ),
+                vol.Optional(CONF_UPSTREAM_ENTITY):
+                    selector.EntitySelector(
+                        selector.EntitySelectorConfig(domain=["sensor"], multiple=False)
+                    ),
+                vol.Optional(CONF_DOWNSTREAM_POWER, default=o.get(CONF_DOWNSTREAM_POWER, [])):
+                    selector.EntitySelector(
+                        selector.EntitySelectorConfig(domain=["sensor"], multiple=True)
+                    ),
+                vol.Optional(CONF_CREATE_PROXIES, default=o.get(CONF_CREATE_PROXIES, False)): bool,
+                vol.Optional(CONF_ENABLE_ENERGY, default=o.get(CONF_ENABLE_ENERGY, False)): bool,
+                vol.Optional(CONF_DOWNSTREAM_ENERGY, default=o.get(CONF_DOWNSTREAM_ENERGY, [])):
+                    selector.EntitySelector(
+                        selector.EntitySelectorConfig(domain=["sensor"], multiple=True)
+                    ),
             }
         )
+
 
         return self.async_show_form(step_id="user", data_schema=schema, errors=errors)
 
