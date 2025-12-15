@@ -1,5 +1,8 @@
 {
-  "name": "Hierarchical Power Aggregator",
+  "name": "Jan's Home Assistant Integrations",
   "content_in_root": false,
-  "render_readme": true
+  "render_readme": true,
+  "domains": ["integration"],
+  "zip_release": true,
+  "filename": "jan-ha-integrations.zip"
 }
