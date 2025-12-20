@@ -3,8 +3,8 @@
   "name": "Hierarchical Power Aggregator",
   "codeowners": ["@jebeke65"],
   "config_flow": true,
-  "documentation": "https://github.com/jebeke65/hacs_integrations",
-  "issue_tracker": "https://github.com/jebeke65/hacs_integrations/issues",
+  "documentation": "https://github.com/jebeke65/hierarchical_power_aggregator",
+  "issue_tracker": "https://github.com/jebeke65/hierarchical_power_aggregator/issues",
   "version": "0.0.1",
   "iot_class": "local_polling",
   "requirements": []
