@@ -1,8 +1,11 @@
 {
-  "name": "Jan's Home Assistant Integrations",
+  "name": "Hierarchical Power Aggregator",
+  "domain": "hierarchical_power_aggregator",
   "content_in_root": false,
   "render_readme": true,
-  "domains": ["integration"],
-  "zip_release": true,
-  "filename": "jan-ha-integrations.zip"
+  "homeassistant": "2024.6.0",
+  "country": "BE",
+  "iot_class": "local_polling",
+  "repository": "https://github.com/jebeke65/hierarchical_power_aggregator",
+  "authors": ["jebeke65"]
 }
