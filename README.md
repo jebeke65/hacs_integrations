@@ -1,36 +1,141 @@
 # Hierarchical Power Aggregator
 
-Create **hierarchical “total” power/energy sensors** (and chain them) so you can use them in dashboards/cards like **Sankey**.
+Hierarchical Power Aggregator is a Home Assistant integration that creates **hierarchical “total” power (and optional energy) sensors** by summing the power values of selected downstream sensors — and letting you **chain totals into higher-level nodes** (e.g. device → room → floor → whole house).
 
-Each config entry represents a **node** (e.g. `Room A`, `Room Beneden`, `Breaker 3`):
+This is especially useful for dashboards/cards like **Sankey**, where you want a clear upstream/downstream structure.
 
-- Select downstream **power sensors** (W) and (optionally) downstream **energy sensors** (kWh/Wh).
-- The integration creates:
-  - `sensor.<node>_power_total`
-  - `sensor.<node>_energy_total` (optional)
-- You can use created totals as downstream inputs for other nodes to build a hierarchy.
-- Optionally create **proxy (“tagged”) sensors** per downstream power sensor that mirror the original value and add upstream metadata.
+* * *
 
-## Install (HACS)
+## ✨ Features
 
-1. Add this repository to HACS as a custom repository (**Integration**).
-2. Install **Hierarchical Power Aggregator**.
-3. Restart Home Assistant.
+✔ Create one config entry per **node** (e.g. `Room A`, `Room Downstairs`, `Circuit Breaker 3`)  
+✔ Aggregate downstream **power sensors (W)** into a node total  
+✔ Optional **energy total** per node (downstream kWh/Wh → summed to a node energy total)  
+✔ Build a **hierarchy** by using a node’s totals as downstream inputs for another node  
+✔ Optional **Upstream / parent sensor** reference for each node  
+✔ Optional **proxy (“tagged”) sensors** per downstream power sensor, that:
+  * mirror the original value
+  * add upstream metadata (useful for tracing/visualizing)
 
-## Configuration
+✔ Handles missing data:
+  * `unknown` / `unavailable` downstream sensors are treated as `0`
+✔ Cycle protection:
+  * attempts to prevent indirect cycles
+  * if a cycle is detected, totals become `unavailable` and expose `cycle_detected: true`
 
-Settings → Devices & services → Add integration → **Hierarchical Power Aggregator**
+* * *
+
+## Installation via HACS
+
+### Method 1 — HACS Custom Repository
+
+1. Open Home Assistant
+2. Go to HACS → Integrations
+3. Click the ⋮ menu → Custom repositories
+4. Add:
+
+   `https://github.com/jebeke65/hierarchical_power_aggregator`
+
+   Category: **Integration**
+
+5. Install **Hierarchical Power Aggregator**
+6. Restart Home Assistant after installation
+
+* * *
+
+## ⚙️ Configuration
+
+After installation:
+
+1. Go to  
+   **Settings → Devices & Services → Add Integration**
+2. Search for **Hierarchical Power Aggregator**
+
+Each config entry represents a **node**.
 
 ### Options (per node)
 
-- **Upstream total sensor (optional)**: choose another node's `*_power_total` (or any sensor) to represent the parent/upstream.
-- **Downstream power sensors (W)**
-- **Create proxy sensors for downstream power**: creates `sensor.<source>__in_<node>` sensors with attributes:
-  - `upstream_node`, `upstream_chain`, `upstream_entity`, `source_entity_id`
-- **Enable energy total** + **Downstream energy sensors (kWh/Wh)**
+- **Upstream total sensor** (optional)  
+  Choose another node’s `*_power_total` (or any sensor) to represent the parent/upstream.
 
-## Notes
+- **Downstream power sensors (W)**  
+  Select the sensors that should be summed into this node’s total.
 
-- Unknown/unavailable downstream sensors are treated as `0`.
-- The integration tries to prevent indirect cycles. If a cycle is detected, totals will show `unavailable` and an attribute `cycle_detected: true`.
+- **Create proxy sensors for downstream power** (optional)  
+  Creates `sensor.<source>__in_<node>` sensors with attributes:
+  - `upstream_node`
+  - `upstream_chain`
+  - `upstream_entity`
+  - `source_entity_id`
 
+- **Enable energy total** (optional)  
+  Also creates a node energy total, using:
+  - **Downstream energy sensors (kWh/Wh)**
+
+### Generated sensors
+
+For each node (example: `Room A`):
+
+- `sensor.room_a_power_total`
+- `sensor.room_a_energy_total` *(optional, only when enabled)*
+
+* * *
+
+## 📌 Examples
+
+### Example hierarchy
+
+- Node: `Room A`
+  - downstream power: `sensor.pc_power`, `sensor.monitor_power`
+- Node: `Floor 1`
+  - downstream power: `sensor.room_a_power_total`, `sensor.room_b_power_total`
+
+This lets you build a tree like:
+
+**devices → rooms → floors → whole house**
+
+* * *
+
+## 🧾 Sensor Attributes
+
+Node total sensors expose useful debugging/trace attributes such as:
+
+- `cycle_detected: true` *(only when applicable)*
+
+Proxy (“tagged”) sensors include:
+
+- `upstream_node`
+- `upstream_chain`
+- `upstream_entity`
+- `source_entity_id`
+
+* * *
+
+## 🧠 How it works
+
+The integration:
+
+- Takes your configured nodes
+- Reads the selected downstream entities
+- Sums downstream power into `*_power_total`
+- Optionally sums downstream energy into `*_energy_total`
+- Optionally creates proxy sensors per downstream power sensor (for metadata / visualization)
+- Checks for cycles and prevents invalid chains where possible
+
+* * *
+
+## 🗺️ Planned Enhancements
+
+- Optional helpers for per-node statistics (daily/weekly/monthly) *(if desired)*
+
+* * *
+
+## Issues / Feature Requests
+
+https://github.com/jebeke65/hierarchical_power_aggregator/issues
+
+* * *
+
+## License
+
+MIT License — see LICENSE file.
